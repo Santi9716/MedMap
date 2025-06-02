@@ -63,7 +63,7 @@ class Sistema {
     // Mostrar menú principal (simulado)
     mostrarMenuPrincipal() {
         alert(`Bienvenido ${this.usuarioActual.nombre}!`);
-        // Aquí iría la lógica para mostrar el menú real
+        window.location.href = "mapa.html";
     }
 }
 
