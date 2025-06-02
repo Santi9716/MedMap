@@ -1,4 +1,3 @@
-// Elementos del DOM
 const btnInicio = document.getElementById("btnInicio");
 const formInicio = document.getElementById("formInicio");
 const btnsIniciales = document.getElementById("btnsIniciales");
@@ -10,7 +9,6 @@ const btnIngSesion = document.getElementById("btnIngSesion");
 const inputUsuario = document.getElementById("inputUsuario");
 const inputContraseña = document.getElementById("inputContraseña");
 
-
 import { UsuarioRegistrado } from "./UsuarioRegistrado.js";
 
 class Sistema {
@@ -18,36 +16,35 @@ class Sistema {
         this.usuarios = this.cargarUsuarios() || [];
         this.lugares = [];
         this.usuarioActual = null;
+        
+        // Inicializar recuperación de contraseña si estamos en mapa.html
+        if (window.location.pathname.includes('mapa.html')) {
+            this.inicializarRecuperacion();
+        }
     }
-
     
     cargarUsuarios() {
         const usuariosGuardados = localStorage.getItem('usuarios');
         return usuariosGuardados ? JSON.parse(usuariosGuardados) : null;
     }
 
-    // Guardar usuarios en LocalStorage
     guardarUsuarios() {
         localStorage.setItem('usuarios', JSON.stringify(this.usuarios));
     }
 
-    // Registrar un nuevo usuario
     registrarUsuario(nombre, usuario, contraseña, email, celular) {
-        // Verificar si el usuario ya existe
         const usuarioExistente = this.usuarios.find(u => u.usuario === usuario);
         if (usuarioExistente) {
             alert("El nombre de usuario ya está en uso");
             return false;
         }
 
-        // Crear nuevo usuario
         const nuevoUsuario = new UsuarioRegistrado(nombre, usuario, contraseña, email, celular);
         this.usuarios.push(nuevoUsuario);
         this.guardarUsuarios();
         return true;
     }
 
-    // Iniciar sesión
     login(usuario, contraseña) {
         const usuarioEncontrado = this.usuarios.find(u => 
             u.usuario === usuario && u.contraseña === contraseña
@@ -60,75 +57,127 @@ class Sistema {
         return false;
     }
 
-    // Mostrar menú principal (simulado)
     mostrarMenuPrincipal() {
         alert(`Bienvenido ${this.usuarioActual.nombre}!`);
         window.location.href = "mapa.html";
+    }
+    
+    inicializarRecuperacion() {
+        const olvidoBtn = document.getElementById("olvidoContraseña");
+        const modal = document.getElementById("modalRecuperacion");
+        const closeBtn = document.querySelector(".cerrar-modal");
+        const confirmarBtn = document.getElementById("btnConfirmarRecuperacion");
+        
+        if (olvidoBtn) {
+            olvidoBtn.addEventListener("click", () => {
+                modal.style.display = "block";
+            });
+        }
+        
+        if (closeBtn) {
+            closeBtn.addEventListener("click", () => {
+                modal.style.display = "none";
+                document.getElementById("mensajeRecuperacion").textContent = "";
+            });
+        }
+        
+        if (confirmarBtn) {
+            confirmarBtn.addEventListener("click", () => {
+                const email = document.getElementById("emailRecuperacion").value;
+                const nuevaPass = document.getElementById("nuevaContraseñaRec").value;
+                const confirmarPass = document.getElementById("confirmarContraseñaRec").value;
+                
+                // Buscar usuario por email
+                const usuario = this.usuarios.find(u => u.email === email);
+                
+                if (!usuario) {
+                    document.getElementById("mensajeRecuperacion").textContent = "No existe un usuario con ese correo";
+                    return;
+                }
+                
+                if (nuevaPass !== confirmarPass) {
+                    document.getElementById("mensajeRecuperacion").textContent = "Las contraseñas no coinciden";
+                    return;
+                }
+                
+                // Cambiar la contraseña
+                usuario.contraseña = nuevaPass;
+                this.guardarUsuarios();
+                
+                document.getElementById("mensajeRecuperacion").textContent = "Contraseña cambiada con éxito!";
+                document.getElementById("emailRecuperacion").value = "";
+                document.getElementById("nuevaContraseñaRec").value = "";
+                document.getElementById("confirmarContraseñaRec").value = "";
+                
+                setTimeout(() => {
+                    modal.style.display = "none";
+                    document.getElementById("mensajeRecuperacion").textContent = "";
+                }, 2000);
+            });
+        }
     }
 }
 
 // Crear instancia del sistema
 const sistema = new Sistema();
 
-// Event Listeners
-btnInicio.addEventListener("click", () => {
-    formInicio.style.display = "block";
-    btnsIniciales.style.display = "none";
-});
-
-btnRegistro.addEventListener("click", () => {
-    formRegistro.style.display = "block";
-    btnsIniciales.style.display = "none";
-});
-
-btnRegresar.forEach(boton => {
-    boton.addEventListener("click", () => {
-        formInicio.style.display = "none";
-        formRegistro.style.display = "none";
-        btnsIniciales.style.display = "block";
+// Event Listeners (solo para index.html)
+if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+    btnInicio.addEventListener("click", () => {
+        formInicio.style.display = "block";
+        btnsIniciales.style.display = "none";
     });
-});
 
-// Registrar nuevo usuario
-btnIngRegistro.addEventListener("click", () => {
-    const nombre = document.getElementById("nombre").value;
-    const usuario = document.getElementById("usuario").value;
-    const contraseña = document.getElementById("contraseña").value;
-    const email = document.getElementById("email").value;
-    const celular = document.getElementById("celular").value;
+    btnRegistro.addEventListener("click", () => {
+        formRegistro.style.display = "block";
+        btnsIniciales.style.display = "none";
+    });
 
-    if (!nombre || !usuario || !contraseña || !email || !celular) {
-        alert("Por favor complete todos los campos");
-        return;
-    }
+    btnRegresar.forEach(boton => {
+        boton.addEventListener("click", () => {
+            formInicio.style.display = "none";
+            formRegistro.style.display = "none";
+            btnsIniciales.style.display = "block";
+        });
+    });
 
-    if (sistema.registrarUsuario(nombre, usuario, contraseña, email, celular)) {
-        alert("Usuario registrado con éxito!");
-        formRegistro.style.display = "none";
-        btnsIniciales.style.display = "block";
-        // Limpiar formulario
-        document.getElementById("nombre").value = "";
-        document.getElementById("usuario").value = "";
-        document.getElementById("contraseña").value = "";
-        document.getElementById("email").value = "";
-        document.getElementById("celular").value = "";
-    }
-});
+    btnIngRegistro.addEventListener("click", () => {
+        const nombre = document.getElementById("nombre").value;
+        const usuario = document.getElementById("usuario").value;
+        const contraseña = document.getElementById("contraseña").value;
+        const email = document.getElementById("email").value;
+        const celular = document.getElementById("celular").value;
 
-// Iniciar sesión
-btnIngSesion.addEventListener("click", () => {
-    const usuario = inputUsuario.value;
-    const contraseña = inputContraseña.value;
+        if (!nombre || !usuario || !contraseña || !email || !celular) {
+            alert("Por favor complete todos los campos");
+            return;
+        }
 
-    if (!usuario || !contraseña) {
-        alert("Por favor ingrese usuario y contraseña");
-        return;
-    }
+        if (sistema.registrarUsuario(nombre, usuario, contraseña, email, celular)) {
+            alert("Usuario registrado con éxito!");
+            formRegistro.style.display = "none";
+            btnsIniciales.style.display = "block";
+            document.getElementById("nombre").value = "";
+            document.getElementById("usuario").value = "";
+            document.getElementById("contraseña").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("celular").value = "";
+        }
+    });
 
-    if (sistema.login(usuario, contraseña)) {
-        sistema.mostrarMenuPrincipal();
-        // Aquí iría la navegación al menú principal
-    } else {
-        alert("Usuario o contraseña incorrectos");
-    }
-});
+    btnIngSesion.addEventListener("click", () => {
+        const usuario = inputUsuario.value;
+        const contraseña = inputContraseña.value;
+
+        if (!usuario || !contraseña) {
+            alert("Por favor ingrese usuario y contraseña");
+            return;
+        }
+
+        if (sistema.login(usuario, contraseña)) {
+            sistema.mostrarMenuPrincipal();
+        } else {
+            alert("Usuario o contraseña incorrectos");
+        }
+    });
+}

@@ -4,8 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <img src="images/mapa medellin.avif" alt="">
+    <img src="images/mapa medellin.avif" alt=""><br>
+    <button id="olvidoContraseña">olvido contraseña</button>
+    
+    <!-- Modal de recuperación de contraseña -->
+    <div id="modalRecuperacion" class="modal-recuperacion">
+        <div class="modal-contenido">
+            <span class="cerrar-modal">&times;</span>
+            <h2>Recuperar Contraseña</h2>
+            <input type="email" id="emailRecuperacion" placeholder="Correo electrónico" required><br><br>
+            <input type="password" id="nuevaContraseñaRec" placeholder="Nueva contraseña" required><br><br>
+            <input type="password" id="confirmarContraseñaRec" placeholder="Confirmar nueva contraseña" required><br><br>
+            <button id="btnConfirmarRecuperacion">Cambiar Contraseña</button>
+            <p id="mensajeRecuperacion" style="margin-top: 10px;"></p>
+        </div>
+    </div>
+
+    <script type="module" src="js/Sistema.js"></script>
 </body>
 </html>
