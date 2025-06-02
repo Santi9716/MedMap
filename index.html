@@ -1,11 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mapa Virtual Medellín</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
 </head>
 <body>
-    
+  <header>
+    <div class="header-content">
+        <h1>🌎 Med Map</h1>
+        <p>¡Bienvenido a Medallo... Descubre, explora y guarda tus mejores momentos!</p>
+    </div>  
+  <img src="imagenes/usuario.png" alt="icono de usuario">
+  </header>
+
+  <main>
+    <div id="map">
+    <div id="botones">
+      <button id="btn-seguimiento">Seguimiento</button>
+      <button id="btn-albums">Albums</button>
+      <button id="btn-cerrar-sesion">Cerrar Sesión</button>
+    </div>
+    <div class="sitios">
+    <img class="pin pin-arte" src="imagenes/pinArte.png" alt="">
+    <img class="pin pin-aventura" src="imagenes/pinAventura.png" alt="">
+    <img class="pin pin-monumento" src="imagenes/pinMonumento.png" alt="">
+    </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+<div class="footer-redes">
+      <div class="footer-red">
+        <a href="" target="_blank">
+        <img src="imagenes/Ubicacion.png" alt="landing" />
+      </a>
+      <p>Pagina de contacto</p>
+      </div>
+      <div class="footer-red">
+        <a href="" target="_blank">
+        <img src="imagenes/whatsapp.png" alt="WhatsApp" />
+      </a>
+      <p>WhatsApp</p>
+      </div>
+
+      <div class="footer-red">
+        <a href="" target="_blank">
+          <img src="imagenes/instagram.png" alt="Instagram" />
+        </a>
+        <p>Instagram</p>
+      </div>
+
+      <div class="footer-red">
+        <a href="" target="_blank">
+          <img src="imagenes/facebook.png" alt="Facebook" />
+        </a>
+        <p>Facebook</p>
+      </div>
+    </div>
+    <div class="footer-info"> 
+    <p>Hecho con ❤️ en Medellín</p>
+    <p>© 2025 MedMap Group. Todos los derechos reservados.</p>
+  </div>
+    </div>
+  
+  </footer>
 </body>
 </html>
