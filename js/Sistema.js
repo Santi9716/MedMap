@@ -58,7 +58,6 @@ class Sistema {
     }
 
     mostrarMenuPrincipal() {
-        alert(`Bienvenido ${this.usuarioActual.nombre}!`);
         window.location.href = "mapa.html";
     }
     
@@ -178,6 +177,16 @@ if (window.location.pathname.endsWith('index.html') || window.location.pathname 
             sistema.mostrarMenuPrincipal();
         } else {
             alert("Usuario o contraseña incorrectos");
+        }
+    });
+}
+
+if (window.location.pathname.includes("mapa.html")) {
+    document.addEventListener("DOMContentLoaded", () => {
+        const nombre = localStorage.getItem('nombreUsuario');
+        const mensaje = document.getElementById("mensajeMapa");
+        if (nombre && mensaje) {
+            mensaje.textContent = `¡Bienvenido ${nombre}!`;
         }
     });
 }
