@@ -84,7 +84,7 @@ main {
 
 #form-container {
   position: absolute;
-  top: 40px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
@@ -97,7 +97,40 @@ main {
   text-align: center;
   display: flex; /* Añadido para el layout de los campos */
   flex-direction: column; /* Añadido para el layout de los campos */
+  justify-content: center;
+  align-items: center; /* Añadido para centrar los campos */
   gap: 10px; /* Añadido para espaciado entre campos */
+}
+
+#form-container .logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+#form-container .logo-container img {
+  max-width: 80px;
+  max-height: 80px;
+  width: auto;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(57,139,206,0.10);
+}
+
+#form-container input[type="text"],
+#form-container input[type="file"] {
+  width: 100%;
+  font-size: 1.15em;
+  padding: 14px 10px;
+  border-radius: 8px;
+  border: 1.5px solid #398bce;
+  margin-bottom: 12px;
+  background: #f7faff;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
 }
 
 .sitios {
@@ -151,6 +184,23 @@ main {
   width: 90%; /* Para que ocupe un ancho similar al mapa */
   max-width: 450px; /* Limita el ancho en pantallas grandes */
 }
+
+main button {
+  width: 200px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #075392; /* Tu color original */
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 20px 40px;
+  font-size: large;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}	
 
 #botones button {
   padding: 10px 20px;
