@@ -6,6 +6,8 @@
 
 html {
   background-image: url(../imagenes/fondo.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 body {
@@ -28,7 +30,7 @@ p {
 }
 
 header {
-  background-color: #075392;
+  background-color: #398bce;
   color: white;
   padding: 40px;
   text-align: center;
@@ -68,7 +70,7 @@ main {
 
 #map {
   width: 90%;
-  height: 700px;
+  height: 800px;
   min-height: 60vh; /* Ajustado para que no ocupe toda la pantalla */
   margin: 20px auto;
   border-radius: 10px;
