@@ -41,7 +41,6 @@ export class UsuarioRegistrado extends Usuario {
         this.fotos.push(foto);
     }
 
-    // Método para reconstruir el objeto desde JSON
     static fromJSON(json) {
         const usuario = new UsuarioRegistrado(
             json.nombre,

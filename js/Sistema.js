@@ -42,6 +42,16 @@ class Sistema {
         localStorage.setItem('usuarios', JSON.stringify(this.usuarios));
     }
 
+    actualizarUsuarioActual() {
+        // Actualiza el usuario en la lista de usuarios
+        const index = this.usuarios.findIndex(u => u.usuario === this.usuarioActual.usuario);
+        if (index !== -1) {
+            this.usuarios[index] = this.usuarioActual;
+            this.guardarUsuarios();
+        }
+        localStorage.setItem('usuarioActual', JSON.stringify(this.usuarioActual));
+    }
+
     registrarUsuario(nombre, usuario, contraseña, email, celular) {
         const usuarioExistente = this.usuarios.find(u => u.usuario === usuario);
         if (usuarioExistente) {
@@ -140,7 +150,6 @@ class Sistema {
                 });
             });
 
-            // Mostrar todos los lugares en el seguimiento
             this.mostrarTodosLugaresEnSeguimiento();
         });
     }
@@ -187,11 +196,10 @@ class Sistema {
         if (!lugarSeleccionado) return;
         
         if (this.usuarioActual.marcarComoVisitado(lugarSeleccionado)) {
-            this.guardarUsuarios();
-            localStorage.setItem('usuarioActual', JSON.stringify(this.usuarioActual));
+            this.actualizarUsuarioActual();
             alert(`Lugar ${lugarSeleccionado} marcado como visitado!`);
-            this.mostrarInterfazAgregarLugar(); // Refresh the list
-            this.mostrarTodosLugaresEnSeguimiento(); // Actualizar seguimiento
+            this.mostrarInterfazAgregarLugar();
+            this.mostrarTodosLugaresEnSeguimiento();
         }
     }
 
