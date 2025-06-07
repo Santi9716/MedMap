@@ -1,3 +1,4 @@
+
 import { inicializarCamara } from './camara.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -66,6 +67,8 @@ map.on('click', function(e) {
     document.getElementById('form-container').classList.add('hidden');
     modoAgregarSitio = false; // Desactiva el modo de agregar sitio
   }
+
+  
 
   // --- Funcionalidades de Botones Adicionales ---
 
@@ -245,4 +248,69 @@ map.on('click', function(e) {
   inicializarCamara();
 
   // Aquí puedes agregar el resto de tu lógica de mapa, sitios, etc.
+map.on('click', function (e) {
+  if (modoAgregarSitio) {
+    currentLatLng = e.latlng;
+    document.getElementById('form-container').classList.remove('hidden');
+    // modoAgregarSitio se desactiva en savePlace() o resetForm()
+  }
+});
+
+// ...definición de map, currentLatLng, modoAgregarSitio, mostrarMensaje, addMarkerToMap...
+
+function savePlace() {
+  const album = document.getElementById('album-name').value.trim();
+  const name = document.getElementById('place-name').value.trim();
+  const photoInput = document.getElementById('photo-upload');
+
+  if (!album || !name || !photoInput.files.length) {
+    mostrarMensaje("Por favor ingresa el nombre del álbum, el nombre del sitio y al menos una imagen.");
+    return;
+  }
+
+  let images = [];
+  let files = Array.from(photoInput.files);
+  let loaded = 0;
+
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      images.push(e.target.result);
+      loaded++;
+      if (loaded === files.length) {
+        const place = {
+          album,
+          name,
+          lat: currentLatLng.lat,
+          lng: currentLatLng.lng,
+          images,
+          date: new Date().toISOString()
+        };
+
+        // Guardar en localStorage
+        const storedPlaces = JSON.parse(localStorage.getItem("places")) || [];
+        storedPlaces.push(place);
+        localStorage.setItem("places", JSON.stringify(storedPlaces));
+
+        addMarkerToMap(place);
+        resetForm();
+        modoAgregarSitio = false;
+        mostrarMensaje("Sitio guardado con éxito!");
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function resetForm() {
+  document.getElementById('album-name').value = '';
+  document.getElementById('place-name').value = '';
+  document.getElementById('photo-upload').value = '';
+  document.getElementById('form-container').classList.add('hidden');
+  modoAgregarSitio = false;
+}
+
+document.getElementById('btn-guardar-sitio').addEventListener('click', savePlace);
+document.getElementById('btn-cancelar-sitio').addEventListener('click', resetForm);
+
 });
