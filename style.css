@@ -117,3 +117,92 @@ label {
         .cerrar-modal:hover {
             color: black;
         }
+
+#agregarLugarInterfaz, #seguimientoLugaresInterfaz {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 500px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+#listaPendientes {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+#listadoLugares {
+    text-align: left;
+    margin: 20px 0;
+}
+
+#listadoLugares div {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.btnRegresar {
+    background-color: #6c757d;
+    margin-top: 20px;
+}
+
+.btnRegresar:hover {
+    background-color: #5a6268;
+}
+
+/* Estilos para las nuevas interfaces */
+#agregarLugarInterfaz, #seguimientoLugaresInterfaz {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    max-width: 500px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+#listaPendientes {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#listaPendientes option {
+    padding: 8px;
+}
+
+#listaPendientes:focus {
+    outline: none;
+    border-color: #007BFF;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+#listadoLugares {
+    text-align: left;
+    margin: 20px 0;
+    padding: 10px;
+    background-color: white;
+    border-radius: 8px;
+}
+
+#listadoLugares div {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.btnRegresar {
+    background-color: #6c757d;
+    margin-top: 20px;
+}
+
+.btnRegresar:hover {
+    background-color: #5a6268;
+}
