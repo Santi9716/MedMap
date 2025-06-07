@@ -1,0 +1,47 @@
+1.clase abstracta Usuario
+
+Atributos:
+nombre
+usuario
+contraseña
+email
+celular
+
+métodos:
+MostrarMenu
+IniciarSesion
+recuperar contraseña
+cambiar contraseña
+cerrar sesión
+
+
+2.Subclase UsuarioRegistrado - > hereda de Usuario
+Atributos:
+lugaresVisitados = []
+lugaresPendientes = []
+fotos = []
+
+Metodos:
+agregarLugarVisitado
+agregarLugarPendiente
+subirFoto
+
+3. Clase complementaria LugarTuristico
+Atributos:
+nombre
+Ubicación
+Calificación
+
+Metodos:
+Calificar
+
+
+4.Clase SistemaTurismo
+Atributos:
+Usuarios=[]
+lugares=[]
+
+Metodos:
+RegistrarUsuario
+login
+buscarLugar
