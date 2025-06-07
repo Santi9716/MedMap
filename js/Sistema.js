@@ -19,17 +19,23 @@ class Sistema {
         
         if (window.location.pathname.includes('mapa.html')) {
             this.inicializarRecuperacion();
+            this.inicializarInterfazLugares();
         }
     }
     
     cargarUsuarios() {
         const usuariosGuardados = localStorage.getItem('usuarios');
-        return usuariosGuardados ? JSON.parse(usuariosGuardados) : null;
+        if (!usuariosGuardados) return null;
+        
+        const usuariosJSON = JSON.parse(usuariosGuardados);
+        return usuariosJSON.map(usuario => UsuarioRegistrado.fromJSON(usuario));
     }
 
     cargarUsuarioActual() {
         const usuarioGuardado = localStorage.getItem('usuarioActual');
-        return usuarioGuardado ? JSON.parse(usuarioGuardado) : null;
+        if (!usuarioGuardado) return null;
+        
+        return UsuarioRegistrado.fromJSON(JSON.parse(usuarioGuardado));
     }
 
     guardarUsuarios() {
@@ -73,45 +79,162 @@ class Sistema {
         const closeBtn = document.querySelector(".cerrar-modal");
         const confirmarBtn = document.getElementById("btnConfirmarRecuperacion");
         
-        if (olvidoBtn) {
-            olvidoBtn.addEventListener("click", () => {
-                modal.style.display = "block";
-            });
-        }
+        if (olvidoBtn) olvidoBtn.addEventListener("click", () => modal.style.display = "block");
+        if (closeBtn) closeBtn.addEventListener("click", () => {
+            modal.style.display = "none";
+            document.getElementById("mensajeRecuperacion").textContent = "";
+        });
         
-        if (closeBtn) {
-            closeBtn.addEventListener("click", () => {
+        if (confirmarBtn) confirmarBtn.addEventListener("click", () => {
+            const email = document.getElementById("emailRecuperacion").value;
+            const nuevaPass = document.getElementById("nuevaContraseñaRec").value;
+            const confirmarPass = document.getElementById("confirmarContraseñaRec").value;
+            
+            const usuario = this.usuarios.find(u => u.email === email);
+            
+            if (!usuario) {
+                document.getElementById("mensajeRecuperacion").textContent = "No existe un usuario con ese correo";
+                return;
+            }
+            
+            if (nuevaPass !== confirmarPass) {
+                document.getElementById("mensajeRecuperacion").textContent = "Las contraseñas no coinciden";
+                return;
+            }
+            
+            usuario.contraseña = nuevaPass;
+            this.guardarUsuarios();
+            
+            document.getElementById("mensajeRecuperacion").textContent = "Contraseña cambiada con éxito!";
+            setTimeout(() => {
                 modal.style.display = "none";
                 document.getElementById("mensajeRecuperacion").textContent = "";
+            }, 2000);
+        });
+    }
+
+    inicializarInterfazLugares() {
+        document.addEventListener("DOMContentLoaded", () => {
+            const nombre = localStorage.getItem('nombreUsuario');
+            const mensaje = document.getElementById("mensajeMapa");
+            if (nombre && mensaje) mensaje.textContent = `¡Bienvenido ${nombre}!`;
+
+            const agregarLugarBtn = document.getElementById("agregarLugar");
+            const seguimientoLugaresBtn = document.getElementById("seguimientoLugares");
+            const agregarLugarInterfaz = document.getElementById("agregarLugarInterfaz");
+            const seguimientoLugaresInterfaz = document.getElementById("seguimientoLugaresInterfaz");
+            const menuPrincipal = document.getElementById("menuPrincipal");
+            const guardarLugarBtn = document.getElementById("guardarLugar");
+            const listadoLugares = document.getElementById("listadoLugares");
+            const btnRegresar = document.querySelectorAll(".btnRegresar");
+
+            agregarLugarBtn.addEventListener("click", () => this.mostrarInterfazAgregarLugar());
+            seguimientoLugaresBtn.addEventListener("click", () => this.mostrarInterfazSeguimiento());
+            guardarLugarBtn.addEventListener("click", () => this.marcarLugarVisitado());
+            
+            btnRegresar.forEach(boton => {
+                boton.addEventListener("click", () => {
+                    agregarLugarInterfaz.style.display = "none";
+                    seguimientoLugaresInterfaz.style.display = "none";
+                    menuPrincipal.style.display = "block";
+                });
+            });
+
+            // Mostrar todos los lugares en el seguimiento
+            this.mostrarTodosLugaresEnSeguimiento();
+        });
+    }
+
+    mostrarInterfazAgregarLugar() {
+        if (!this.usuarioActual) {
+            alert("No hay usuario logueado");
+            return;
+        }
+
+        document.getElementById("menuPrincipal").style.display = "none";
+        document.getElementById("agregarLugarInterfaz").style.display = "block";
+        
+        const listaPendientes = document.getElementById("listaPendientes");
+        listaPendientes.innerHTML = "";
+        
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = "Selecciona un lugar";
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        listaPendientes.appendChild(defaultOption);
+
+        if (this.usuarioActual.lugaresPendientes?.length > 0) {
+            this.usuarioActual.lugaresPendientes.forEach(lugar => {
+                const option = document.createElement("option");
+                option.value = lugar;
+                option.textContent = lugar;
+                listaPendientes.appendChild(option);
+            });
+            document.getElementById("guardarLugar").disabled = false;
+        } else {
+            const option = document.createElement("option");
+            option.value = "";
+            option.textContent = "No hay lugares pendientes";
+            option.disabled = true;
+            listaPendientes.appendChild(option);
+            document.getElementById("guardarLugar").disabled = true;
+        }
+    }
+
+    marcarLugarVisitado() {
+        const lugarSeleccionado = document.getElementById("listaPendientes").value;
+        if (!lugarSeleccionado) return;
+        
+        if (this.usuarioActual.marcarComoVisitado(lugarSeleccionado)) {
+            this.guardarUsuarios();
+            localStorage.setItem('usuarioActual', JSON.stringify(this.usuarioActual));
+            alert(`Lugar ${lugarSeleccionado} marcado como visitado!`);
+            this.mostrarInterfazAgregarLugar(); // Refresh the list
+            this.mostrarTodosLugaresEnSeguimiento(); // Actualizar seguimiento
+        }
+    }
+
+    mostrarInterfazSeguimiento() {
+        if (!this.usuarioActual) {
+            alert("No hay usuario logueado");
+            return;
+        }
+
+        document.getElementById("menuPrincipal").style.display = "none";
+        document.getElementById("seguimientoLugaresInterfaz").style.display = "block";
+        this.mostrarTodosLugaresEnSeguimiento();
+    }
+
+    mostrarTodosLugaresEnSeguimiento() {
+        const listadoLugares = document.getElementById("listadoLugares");
+        if (!listadoLugares) return;
+        
+        listadoLugares.innerHTML = "";
+        
+        // Mostrar lugares visitados
+        if (this.usuarioActual.lugaresVisitados?.length > 0) {
+            const tituloVisitados = document.createElement("h3");
+            tituloVisitados.textContent = "Lugares Visitados:";
+            listadoLugares.appendChild(tituloVisitados);
+            
+            this.usuarioActual.lugaresVisitados.forEach(lugar => {
+                const div = document.createElement("div");
+                div.innerHTML = `<span style="color: green;">✓</span> ${lugar}`;
+                listadoLugares.appendChild(div);
             });
         }
         
-        if (confirmarBtn) {
-            confirmarBtn.addEventListener("click", () => {
-                const email = document.getElementById("emailRecuperacion").value;
-                const nuevaPass = document.getElementById("nuevaContraseñaRec").value;
-                const confirmarPass = document.getElementById("confirmarContraseñaRec").value;
-                
-                const usuario = this.usuarios.find(u => u.email === email);
-                
-                if (!usuario) {
-                    document.getElementById("mensajeRecuperacion").textContent = "No existe un usuario con ese correo";
-                    return;
-                }
-                
-                if (nuevaPass !== confirmarPass) {
-                    document.getElementById("mensajeRecuperacion").textContent = "Las contraseñas no coinciden";
-                    return;
-                }
-                
-                usuario.contraseña = nuevaPass;
-                this.guardarUsuarios();
-                
-                document.getElementById("mensajeRecuperacion").textContent = "Contraseña cambiada con éxito!";
-                setTimeout(() => {
-                    modal.style.display = "none";
-                    document.getElementById("mensajeRecuperacion").textContent = "";
-                }, 2000);
+        // Mostrar lugares pendientes
+        if (this.usuarioActual.lugaresPendientes?.length > 0) {
+            const tituloPendientes = document.createElement("h3");
+            tituloPendientes.textContent = "Lugares Pendientes:";
+            listadoLugares.appendChild(tituloPendientes);
+            
+            this.usuarioActual.lugaresPendientes.forEach(lugar => {
+                const div = document.createElement("div");
+                div.innerHTML = `<span style="color: red;">✗</span> ${lugar}`;
+                listadoLugares.appendChild(div);
             });
         }
     }
@@ -161,132 +284,5 @@ if (window.location.pathname.endsWith('index.html') || window.location.pathname 
         } else {
             alert("Usuario o contraseña incorrectos");
         }
-    });
-}
-
-if (window.location.pathname.includes("mapa.html")) {
-    document.addEventListener("DOMContentLoaded", () => {
-        const nombre = localStorage.getItem('nombreUsuario');
-        const mensaje = document.getElementById("mensajeMapa");
-        if (nombre && mensaje) {
-            mensaje.textContent = `¡Bienvenido ${nombre}!`;
-        }
-
-        const agregarLugarBtn = document.getElementById("agregarLugar");
-        const seguimientoLugaresBtn = document.getElementById("seguimientoLugares");
-        const agregarLugarInterfaz = document.getElementById("agregarLugarInterfaz");
-        const seguimientoLugaresInterfaz = document.getElementById("seguimientoLugaresInterfaz");
-        const menuPrincipal = document.getElementById("menuPrincipal");
-        const guardarLugarBtn = document.getElementById("guardarLugar");
-        const listadoLugares = document.getElementById("listadoLugares");
-        const btnRegresar = document.querySelectorAll(".btnRegresar");
-
-        agregarLugarBtn.addEventListener("click", () => {
-            if (!sistema.usuarioActual) {
-                alert("No hay usuario logueado");
-                return;
-            }
-
-            menuPrincipal.style.display = "none";
-            agregarLugarInterfaz.style.display = "block";
-            
-            const listaPendientes = document.getElementById("listaPendientes");
-            listaPendientes.innerHTML = "";
-            
-            const defaultOption = document.createElement("option");
-            defaultOption.value = "";
-            defaultOption.textContent = "Selecciona un lugar";
-            defaultOption.disabled = true;
-            defaultOption.selected = true;
-            listaPendientes.appendChild(defaultOption);
-
-            if (sistema.usuarioActual.lugaresPendientes && sistema.usuarioActual.lugaresPendientes.length > 0) {
-                sistema.usuarioActual.lugaresPendientes.forEach(lugar => {
-                    const option = document.createElement("option");
-                    option.value = lugar;
-                    option.textContent = lugar;
-                    listaPendientes.appendChild(option);
-                });
-                guardarLugarBtn.disabled = false;
-            } else {
-                const option = document.createElement("option");
-                option.value = "";
-                option.textContent = "No hay lugares pendientes";
-                option.disabled = true;
-                listaPendientes.appendChild(option);
-                guardarLugarBtn.disabled = true;
-            }
-        });
-
-        guardarLugarBtn.addEventListener("click", () => {
-            const lugarSeleccionado = document.getElementById("listaPendientes").value;
-            if (!lugarSeleccionado) return;
-            
-            sistema.usuarioActual.lugaresVisitados.push(lugarSeleccionado);
-            sistema.usuarioActual.lugaresPendientes = sistema.usuarioActual.lugaresPendientes.filter(
-                lugar => lugar !== lugarSeleccionado
-            );
-            
-            sistema.guardarUsuarios();
-            localStorage.setItem('usuarioActual', JSON.stringify(sistema.usuarioActual));
-            alert(`Lugar ${lugarSeleccionado} marcado como visitado!`);
-            
-            const listaPendientes = document.getElementById("listaPendientes");
-            listaPendientes.innerHTML = "";
-            
-            if (sistema.usuarioActual.lugaresPendientes.length > 0) {
-                sistema.usuarioActual.lugaresPendientes.forEach(lugar => {
-                    const option = document.createElement("option");
-                    option.value = lugar;
-                    option.textContent = lugar;
-                    listaPendientes.appendChild(option);
-                });
-            } else {
-                const option = document.createElement("option");
-                option.value = "";
-                option.textContent = "No hay lugares pendientes";
-                option.disabled = true;
-                listaPendientes.appendChild(option);
-                guardarLugarBtn.disabled = true;
-            }
-        });
-
-        seguimientoLugaresBtn.addEventListener("click", () => {
-            if (!sistema.usuarioActual) {
-                alert("No hay usuario logueado");
-                return;
-            }
-
-            menuPrincipal.style.display = "none";
-            seguimientoLugaresInterfaz.style.display = "block";
-            
-            listadoLugares.innerHTML = "";
-            
-            if (sistema.usuarioActual.lugaresVisitados && sistema.usuarioActual.lugaresVisitados.length > 0) {
-                sistema.usuarioActual.lugaresVisitados.forEach(lugar => {
-                    const div = document.createElement("div");
-                    div.innerHTML = `<span style="color: green;">✓</span> ${lugar}`;
-                    listadoLugares.appendChild(div);
-                });
-            }
-            
-            if (sistema.usuarioActual.lugaresPendientes && sistema.usuarioActual.lugaresPendientes.length > 0) {
-                sistema.usuarioActual.lugaresPendientes.forEach(lugar => {
-                    const div = document.createElement("div");
-                    div.innerHTML = `<span style="color: red;">✗</span> ${lugar}`;
-                    listadoLugares.appendChild(div);
-                });
-            }
-        });
-
-        btnRegresar.forEach(boton => {
-            boton.addEventListener("click", () => {
-                agregarLugarInterfaz.style.display = "none";
-                seguimientoLugaresInterfaz.style.display = "none";
-                menuPrincipal.style.display = "block";
-            });
-        });
-
-        sistema.inicializarRecuperacion();
     });
 }
