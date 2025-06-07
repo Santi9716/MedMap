@@ -28,6 +28,8 @@
         <input id="album-name" type="text" placeholder="Nombre del álbum"><br>
         <input id="place-name" type="text" placeholder="Nombre del sitio"><br>
         <input id="photo-upload" type="file" multiple><br>
+        <input id="input-camara" type="file" accept="image/*" capture="environment" style="display:none;">
+        <button id="btn-tomar-foto">📸 Capturar</button>
         <button onclick="savePlace()">Guardar</button>
         <button onclick="resetForm()">Cancelar</button>
       </div>
@@ -83,9 +85,7 @@
     </div>
   </footer>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="../js/map.js"></script>
-  <script src="../js/agregar_sitio.js"></script>
-  <script src="../js/map_fprincipales.js"></script>
+  <script type="module" src="../js/map.js"></script>
 </body>
 </html>
 
