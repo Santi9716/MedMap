@@ -383,4 +383,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Cargar lugares guardados al iniciar
   loadSavedPlaces();
-});
+}); 
