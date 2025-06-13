@@ -152,4 +152,47 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+
+    // Recuperación de contraseña
+    const olvidoBtn = document.getElementById("olvidoContraseña");
+    const modal = document.getElementById("modalRecuperacion");
+    const closeBtn = document.querySelector("#modalRecuperacion .cerrar-modal");
+    const confirmarBtn = document.getElementById("btnConfirmarRecuperacion");
+    const mensaje = document.getElementById("mensajeRecuperacion");
+
+    if (olvidoBtn && modal) {
+        olvidoBtn.addEventListener("click", () => {
+            modal.style.display = "flex";
+            if (mensaje) mensaje.textContent = "";
+        });
+    }
+    if (closeBtn && modal) {
+        closeBtn.addEventListener("click", () => {
+            modal.style.display = "none";
+            const mensaje = document.getElementById("mensajeRecuperacion");
+            if (mensaje) mensaje.textContent = "";
+        });
+    }
+    if (confirmarBtn && modal) {
+        confirmarBtn.addEventListener("click", () => {
+            const email = document.getElementById("emailRecuperacion")?.value;
+            const usuarios = JSON.parse(localStorage.getItem('usuarios') || "[]");
+            const usuario = usuarios.find(u => u.email === email);
+
+            if (!usuario) {
+                if (mensaje) mensaje.textContent = "No existe un usuario con ese correo";
+                return;
+            }
+            // Generar nueva contraseña aleatoria
+            const nuevaPass = Math.random().toString(36).slice(-8);
+            usuario.contraseña = nuevaPass;
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+            if (mensaje) mensaje.textContent = `Tu nueva contraseña es: ${nuevaPass}`;
+            // En una app real, aquí se enviaría por email
+            setTimeout(() => {
+                modal.style.display = "none";
+                if (mensaje) mensaje.textContent = "";
+            }, 5000);
+        });
+    }
 });

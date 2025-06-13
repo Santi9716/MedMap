@@ -23,6 +23,7 @@
             <input id="inputContraseña" type="password" placeholder="Contraseña"><br><br>
             <button id="btnIngSesion">Entrar</button><br><br>
             <button class="btnRegInicio">Regresar</button>
+            <button id="olvidoContraseña" type="button">¿Olvidaste tu contraseña?</button>
         </div>
 
         <div id="formRegistro" style="display: none">
@@ -45,6 +46,19 @@
             <button id="btnIngRegistro">Registrar</button>
             <button class="btnRegInicio">Regresar</button>
         </div>
+
+        <div id="modalRecuperacion" style="display:none;">
+            <div class="modal-content">
+                <span class="cerrar-modal" style="cursor:pointer;">&times;</span>
+                <h2>Recuperar contraseña</h2>
+                <label for="emailRecuperacion">Correo electrónico:</label>
+                <input type="email" id="emailRecuperacion">
+                <button id="btnConfirmarRecuperacion">Enviar nueva contraseña</button>
+                <p id="mensajeRecuperacion" style="color:green;"></p>
+            </div>
+        </div>
+
+        
     </div>
 
     <footer>
@@ -83,5 +97,6 @@
     </footer>
 
     <script type="module" src="../js/Sistema.js"></script>
+
 </body>
 </html>

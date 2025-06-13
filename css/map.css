@@ -157,18 +157,6 @@ main {
   cursor: pointer; /* Indica que es interactuable */
 }
 
-.pin-arte {
-  top: 20%;
-  left: 30%;
-}
-.pin-aventura {
-  top: 50%;
-  left: 60%;
-}
-.pin-monumento {
-  top: 10%;
-  left: 40%;
-}
 
 .pin:hover {
   transform: translateY(-10px) scale(1.08) rotateX(10deg);
@@ -177,15 +165,23 @@ main {
 }
 
 #botones {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 16px;
-  width: 90%;
-  max-width: 450px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Tres columnas iguales */
+    gap: 20px; /* Espacio entre los botones */
+    justify-items: center;
+    align-items: center;
+    margin: 24px 0;
+    width: 100%;
+    max-width: 600px; /* Opcional: limita el ancho total */
+    margin-left: auto;
+    margin-right: auto;
 }
+
 #botones button {
-  margin: 0;
+    width: 100%;
+    padding: 14px 0;
+    font-size: 1.1em;
+    border-radius: 8px;
 }
 
 main button {
@@ -451,6 +447,180 @@ footer {
   color: #333;
 }
 
+/* Estilos para el menú de usuario */
+.user-menu-container {
+    position: relative;
+    display: inline-block;
+}
+
+#user-menu-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    min-width: 160px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    padding: 8px 0;
+}
+
+.user-dropdown button {
+    background: none;
+    border: none;
+    padding: 12px 18px;
+    text-align: left;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.user-dropdown button:hover {
+    background: #f0f0f0;
+}
+
+.user-dropdown.hidden {
+    display: none;
+}
+
+/* Nuevos estilos para la sección de sitios */
+.sitios-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 28px;
+    width: 100%;
+    margin: 28px auto;
+    /* Elimina justify-items: center; para que las cards ocupen todo el espacio */
+    align-items: stretch;
+}
+
+.sitio-card {
+    background: #f3f6fa;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    padding: 22px 16px 16px 16px;
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: box-shadow 0.2s;
+}
+
+.sitio-card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.16);
+    background: #e9f0fa;
+}
+
+.sitio-card h4 {
+    margin-bottom: 12px;
+    color: #007bff;
+    font-size: 1.13em;
+    font-weight: 600;
+}
+
+.sitio-card .estado {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.sitio-card button {
+    margin: 7px 0 0 0;
+    padding: 8px 0;
+    width: 90%;
+    border: none;
+    border-radius: 6px;
+    background: #007bff;
+    color: #fff;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-weight: 500;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.sitio-card button + button {
+    margin-top: 8px;
+}
+
+.sitio-card button:hover {
+    background: #0056b3;
+}
+
+#seguimientoLugaresInterfaz,
+#seguimientoLugaresInterfaz .hidden {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+#seguimientoLugaresInterfaz {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 2vw;
+    box-sizing: border-box;
+}
+
+/* Título */
+.seguimiento-titulo {
+    color: #fff;
+    margin-top: 32px;
+    margin-bottom: 18px;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Botón volver */
+#btnVolverMapa,
+.btnRegresar {
+    width: 100%;
+    max-width: 350px;
+    margin: 40px auto 32px auto;
+    padding: 16px 0;
+    font-size: 1.2em;
+    background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    display: block;
+    letter-spacing: 1px;
+}
+
+#btnVolverMapa:hover,
+.btnRegresar:hover {
+    background: linear-gradient(90deg, #0056b3 60%, #007bff 100%);
+    transform: scale(1.03);
+}
+
+/* Estilos para títulos pendientes */
+.titulo-pendientes {
+    color: #fff;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   header {
@@ -528,4 +698,48 @@ footer {
   .footer-info {
     font-size: 14px;
   }
+}
+
+@media (max-width: 900px) {
+    .sitios-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 18px;
+    }
+    .seguimiento-titulo {
+        font-size: 1.4em;
+        margin-top: 18px;
+    }
+    #btnVolverMapa,
+    .btnRegresar {
+        font-size: 1em;
+        padding: 10px 18px;
+        margin-top: 18px;
+        margin-bottom: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    #seguimientoLugaresInterfaz {
+        padding: 0 4vw;
+    }
+    .sitios-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin: 16px 0;
+    }
+    .seguimiento-titulo {
+        font-size: 1.1em;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .sitio-card {
+        padding: 12px 6px 10px 6px;
+    }
+    #btnVolverMapa,
+    .btnRegresar {
+        font-size: 0.95em;
+        padding: 8px 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
 }

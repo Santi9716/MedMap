@@ -251,6 +251,71 @@ footer {
 }
 
 
+/* Modal de Recuperación */
+#modalRecuperacion {
+    position: fixed;
+    inset: 0; /* top:0; right:0; bottom:0; left:0; */
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+#modalRecuperacion .modal-content {
+    background: #fff;
+    padding: 18px 20px;
+    border-radius: 10px;
+    min-width: 240px;
+    max-width: 320px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    font-size: 15px;
+}
+#modalRecuperacion input {
+    width: 100%;
+    padding: 6px 8px;
+    margin: 8px 0 14px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 15px;
+}
+#modalRecuperacion button {
+    padding: 8px 16px;
+    font-size: 15px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 6px;
+}
+#modalRecuperacion button:hover {
+    background-color: #0056b3;
+}
+#modalRecuperacion label {
+    display: block;
+    margin-bottom: 4px;
+    text-align: left;
+    font-size: 14px;
+}
+#modalRecuperacion h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+.cerrar-modal {
+    position: absolute;
+    top: 8px;
+    right: 14px;
+    font-size: 1.5rem;
+    color: #333;
+    cursor: pointer;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   header {

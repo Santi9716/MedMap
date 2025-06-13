@@ -15,7 +15,14 @@
       <h1>🌎 Med Map</h1>
       <p>¡Bienvenido a Medallo... Descubre, explora y guarda tus mejores momentos!</p>
     </div>
-    <img src="../imagenes/usuario.png" alt="icono de usuario">
+    <!-- Menú de usuario en el header -->
+    <div class="user-menu-container">
+      <img id="user-menu-btn" src="../imagenes/usuario.png" alt="Usuario" style="cursor:pointer;">
+      <div id="user-dropdown" class="user-dropdown hidden">
+        <button id="menu-seguimiento">Seguimiento</button>
+        <button id="menu-cerrar-sesion">Cerrar sesión</button>
+      </div>
+    </div>
   </header>
 
   <main>
@@ -35,12 +42,18 @@
       </div>
     </div>
 
-
+    <!-- Botones principales del mapa -->
     <div id="botones">
-      <button id="btn-seguimiento">Seguimiento</button>
-      <button id="btn-albums">Albums</button>
-      <button id="btn-cerrar-sesion">Cerrar Sesión</button>
-      <button id="btn-nuevo-sitio">Nuevo Sitio</button>
+      <button id="btn-seguimiento">📍Ubicación actual</button>
+      <button id="btn-albums">📁Álbums</button>
+      <button id="btn-nuevo-sitio">➕Nuevo Sitio</button>
+    </div>
+
+    <!-- Interfaz de seguimiento de lugares -->
+    <div id="seguimientoLugaresInterfaz" class="hidden">
+      <h2 class="seguimiento-titulo">Seguimiento de sitios de la ciudad</h2>
+      <div id="listadoLugares"></div>
+      <button id="btnVolverMapa" class="btnRegresar">🌎Volver al mapa</button>
     </div>
 
     <div id="albums-container" class="hidden">
@@ -54,7 +67,7 @@
         <p><strong>Comentarios:</strong></p>
         <ul id="album-comments"></ul>
         <div class="album-detail-buttons">
-          <button id="btn-back-to-albums">Volver a Álbumes</button>
+          <button id="btn-back-to-albums">Volver</button>
           <button id="btn-back-to-map-list" class="album-list-back-btn">Volver al Mapa</button>
         </div>
       </div>
@@ -97,6 +110,8 @@
   </footer>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script type="module" src="../js/map.js"></script>
+  <script src="../js/menuUsuario.js"></script>
+  <script src="../js/seguimientoSitios.js"></script>
 </body>
 </html>
 
