@@ -383,4 +383,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Cargar lugares guardados al iniciar
   loadSavedPlaces();
-}); 
+
+  // Listener para el botón "Cerrar Sesión"
+  document.getElementById('btn-cerrar-sesion').addEventListener('click', function () {
+    // Limpia la sesión del usuario
+    localStorage.removeItem('usuarioActual');
+    localStorage.removeItem('nombreUsuario');
+    // Redirige al usuario al login o página principal
+    window.location.href = "index.html";
+  });
+});

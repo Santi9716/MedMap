@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Med Map</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="fondo">
+    <div class="contenido">
+        <header>
+            <img id="logo" src="images/LogoTrans.png" alt="">
+        </header>
+        
+        <div id="btnsIniciales">
+            <button id="btnInicio">Iniciar sesión</button><br><br>
+            <button id="btnRegistro">Registrar usuario</button>
+        </div>
+        
+        <div id="formInicio" style="display: none">
+            <h2>Iniciar sesión</h2>
+            <input id="inputUsuario" type="text" placeholder="Usuario"><br><br>
+            <input id="inputContraseña" type="password" placeholder="Contraseña"><br><br>
+            <button id="btnIngSesion">Entrar</button><br><br>
+            <button class="btnRegInicio">Regresar</button>
+        </div>
+            
+        <div id="formRegistro" style="display: none">
+            <h2>Registro usuario</h2>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" >
+            <label for="usuario">Usuario:</label>
+            <input type="text" id="usuario" name="usuario" >
+            <label for="contraseña">Contraseña:</label>
+            <input type="password" id="contraseña" name="contraseña" >
+            <label for="email">Correo electrónico:</label>
+            <input type="email" id="email" name="email" >
+            <label for="celular">Celular:</label>
+            <input type="tel" id="celular" name="celular">
+            <button id="btnIngRegistro">Registrar</button>
+            <button class="btnRegInicio">Regresar</button>
+        </div>
+
+        <script type="module" src="js/Sistema.js"></script>
+    </div>
+</body>
+</html>

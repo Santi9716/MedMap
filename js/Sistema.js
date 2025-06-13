@@ -1,31 +1,42 @@
-// Elementos del DOM
-const btnInicio = document.getElementById("btnInicio");
-const formInicio = document.getElementById("formInicio");
-const btnsIniciales = document.getElementById("btnsIniciales");
-const btnRegistro = document.getElementById("btnRegistro");
-const formRegistro = document.getElementById("formRegistro");
-const btnRegresar = document.querySelectorAll(".btnRegInicio");
-const btnIngRegistro = document.getElementById("btnIngRegistro");
-const btnIngSesion = document.getElementById("btnIngSesion");
-const inputUsuario = document.getElementById("inputUsuario");
-const inputContraseña = document.getElementById("inputContraseña");
-
 import { UsuarioRegistrado } from "./UsuarioRegistrado.js";
 
 class Sistema {
     constructor() {
         this.usuarios = this.cargarUsuarios() || [];
         this.lugares = [];
-        this.usuarioActual = null;
+        this.usuarioActual = this.cargarUsuarioActual();
+
+        if (window.location.pathname.includes('mapa.html')) {
+            this.inicializarRecuperacion?.();
+            this.inicializarInterfazLugares?.();
+        }
     }
 
     cargarUsuarios() {
         const usuariosGuardados = localStorage.getItem('usuarios');
-        return usuariosGuardados ? JSON.parse(usuariosGuardados) : [];
+        if (!usuariosGuardados) return [];
+        const usuariosJSON = JSON.parse(usuariosGuardados);
+        return usuariosJSON.map(usuario => UsuarioRegistrado.fromJSON(usuario));
+    }
+
+    cargarUsuarioActual() {
+        const usuarioGuardado = localStorage.getItem('usuarioActual');
+        if (!usuarioGuardado) return null;
+        return UsuarioRegistrado.fromJSON(JSON.parse(usuarioGuardado));
     }
 
     guardarUsuarios() {
         localStorage.setItem('usuarios', JSON.stringify(this.usuarios));
+    }
+
+    actualizarUsuarioActual() {
+        // Actualiza el usuario en la lista de usuarios
+        const index = this.usuarios.findIndex(u => u.usuario === this.usuarioActual.usuario);
+        if (index !== -1) {
+            this.usuarios[index] = this.usuarioActual;
+            this.guardarUsuarios();
+        }
+        localStorage.setItem('usuarioActual', JSON.stringify(this.usuarioActual));
     }
 
     registrarUsuario(nombre, usuario, contraseña, email, celular) {
@@ -44,8 +55,11 @@ class Sistema {
         const usuarioEncontrado = this.usuarios.find(u =>
             u.usuario === usuario && u.contraseña === contraseña
         );
+
         if (usuarioEncontrado) {
             this.usuarioActual = usuarioEncontrado;
+            localStorage.setItem('usuarioActual', JSON.stringify(usuarioEncontrado));
+            localStorage.setItem('nombreUsuario', usuarioEncontrado.nombre);
             return true;
         }
         return false;
@@ -55,98 +69,87 @@ class Sistema {
         alert(`Bienvenido ${this.usuarioActual.nombre}!`);
         window.location.href = "mapa.html";
     }
+
+    // Métodos para recuperación y lugares pueden ir aquí si los usas en mapa.html
+    // ...
 }
 
-// Crear instancia del sistema
-const sistema = new Sistema();
+// Todo el código DOM y listeners dentro de DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+    const sistema = new Sistema();
 
-// Mostrar formulario de inicio de sesión
-if (btnInicio) {
-    btnInicio.addEventListener("click", () => {
-        formInicio.style.display = "block";
-        btnsIniciales.style.display = "none";
-        formRegistro.style.display = "none";
-        // Limpiar campos
-        if (inputUsuario) inputUsuario.value = "";
-        if (inputContraseña) inputContraseña.value = "";
-    });
-}
+    // Elementos del DOM
+    const btnInicio = document.getElementById("btnInicio");
+    const formInicio = document.getElementById("formInicio");
+    const btnsIniciales = document.getElementById("btnsIniciales");
+    const btnRegistro = document.getElementById("btnRegistro");
+    const formRegistro = document.getElementById("formRegistro");
+    const btnRegresar = document.querySelectorAll(".btnRegInicio");
+    const btnIngRegistro = document.getElementById("btnIngRegistro");
+    const btnIngSesion = document.getElementById("btnIngSesion");
+    const inputUsuario = document.getElementById("inputUsuario");
+    const inputContraseña = document.getElementById("inputContraseña");
 
-// Mostrar formulario de registro
-if (btnRegistro) {
-    btnRegistro.addEventListener("click", () => {
-        formRegistro.style.display = "block";
-        btnsIniciales.style.display = "none";
-        formInicio.style.display = "none";
-        // Limpiar campos
-        ["nombre", "usuario", "contraseña", "email", "celular"].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.value = "";
-        });
-    });
-}
-
-// Botones de regresar
-if (btnRegresar) {
-    btnRegresar.forEach(boton => {
-        boton.addEventListener("click", () => {
-            formInicio.style.display = "none";
-            formRegistro.style.display = "none";
-            btnsIniciales.style.display = "block";
-        });
-    });
-}
-
-// Registrar nuevo usuario
-if (btnIngRegistro) {
-    btnIngRegistro.addEventListener("click", () => {
-        const nombre = document.getElementById("nombre").value;
-        const usuario = document.getElementById("usuario").value;
-        const contraseña = document.getElementById("contraseña").value;
-        const email = document.getElementById("email").value;
-        const celular = document.getElementById("celular").value;
-
-        if (!nombre || !usuario || !contraseña || !email || !celular) {
-            alert("Por favor complete todos los campos");
-            return;
-        }
-
-        if (sistema.registrarUsuario(nombre, usuario, contraseña, email, celular)) {
-            alert("Usuario registrado con éxito!");
-            formRegistro.style.display = "none";
-            btnsIniciales.style.display = "block";
-            // Limpiar formulario
-            ["nombre", "usuario", "contraseña", "email", "celular"].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.value = "";
+    if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+        if (btnInicio) {
+            btnInicio.addEventListener("click", () => {
+                if (formInicio) formInicio.style.display = "block";
+                if (btnsIniciales) btnsIniciales.style.display = "none";
+                if (formRegistro) formRegistro.style.display = "none";
+                if (inputUsuario) inputUsuario.value = "";
+                if (inputContraseña) inputContraseña.value = "";
             });
         }
-    });
-}
 
-
-// Iniciar sesión
-if (btnIngSesion) {
-    btnIngSesion.addEventListener("click", () => {
-        const usuario = inputUsuario.value;
-        const contraseña = inputContraseña.value;
-
-        if (!usuario || !contraseña) {
-            alert("Por favor ingrese usuario y contraseña");
-            return;
+        if (btnRegistro) {
+            btnRegistro.addEventListener("click", () => {
+                if (formRegistro) formRegistro.style.display = "block";
+                if (btnsIniciales) btnsIniciales.style.display = "none";
+                if (formInicio) formInicio.style.display = "none";
+                ["nombre", "usuario", "contraseña", "email", "celular"].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = "";
+                });
+            });
         }
 
-        if (sistema.login(usuario, contraseña)) {
-            // Redirige al map.html al iniciar sesión exitosamente
-            window.location.href = "map.html";
-        } else {
-            alert("Usuario o contraseña incorrectos");
+        if (btnRegresar && btnRegresar.length) {
+            btnRegresar.forEach(boton => {
+                boton.addEventListener("click", () => {
+                    if (formInicio) formInicio.style.display = "none";
+                    if (formRegistro) formRegistro.style.display = "none";
+                    if (btnsIniciales) btnsIniciales.style.display = "block";
+                });
+            });
         }
-    });
 
-}
+        if (btnIngRegistro) {
+            btnIngRegistro.addEventListener("click", () => {
+                const nombre = document.getElementById("nombre")?.value;
+                const usuario = document.getElementById("usuario")?.value;
+                const contraseña = document.getElementById("contraseña")?.value;
+                const email = document.getElementById("email")?.value;
+                const celular = document.getElementById("celular")?.value;
 
-if (sistema.login(usuario, contraseña)) {
-    localStorage.setItem('usuarioLogueado', usuario);
-    window.location.href = "map.html";
-}
+                if (sistema.registrarUsuario(nombre, usuario, contraseña, email, celular)) {
+                    alert("Usuario registrado con éxito!");
+                    if (formRegistro) formRegistro.style.display = "none";
+                    if (btnsIniciales) btnsIniciales.style.display = "block";
+                }
+            });
+        }
+
+        if (btnIngSesion) {
+            btnIngSesion.addEventListener("click", () => {
+                const usuario = inputUsuario?.value;
+                const contraseña = inputContraseña?.value;
+
+                if (sistema.login(usuario, contraseña)) {
+                    sistema.mostrarMenuPrincipal();
+                } else {
+                    alert("Usuario o contraseña incorrectos");
+                }
+            });
+        }
+    }
+});
