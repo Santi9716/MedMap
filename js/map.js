@@ -101,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+
   // Resetear formulario
   function resetForm() {
     document.getElementById('album-name').value = '';

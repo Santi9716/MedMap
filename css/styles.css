@@ -21,7 +21,7 @@ body.fondo {
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif, 'Segoe UI';
-    background: url('../imagenes/Medellin 3.jpg') no-repeat center center fixed;
+    background: url('../images/Medellin 3.jpg') no-repeat center center fixed;
     background-size: cover;
     display: flex;
     flex-direction: column;
@@ -192,6 +192,13 @@ label {
 #album-images img:hover {
   transform: scale(1.08);
   box-shadow: 0 2px 12px rgba(57,139,206,0.18);
+}
+
+.imagen-lugar {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
 footer {
@@ -402,3 +409,4 @@ footer {
     gap: 15px;
   }
 }
+

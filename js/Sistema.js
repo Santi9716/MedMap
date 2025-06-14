@@ -67,7 +67,7 @@ class Sistema {
 
     mostrarMenuPrincipal() {
         alert(`Bienvenido ${this.usuarioActual.nombre}!`);
-        window.location.href = "mapa.html";
+        window.location.href = "map.html";
     }
 
     // Métodos para recuperación y lugares pueden ir aquí si los usas en mapa.html
